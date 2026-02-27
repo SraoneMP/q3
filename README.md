@@ -1,5 +1,7 @@
 # 🤖 FastAPI Sentiment Analysis with OpenAI Structured Outputs
 
+![Daily Automated Commit - DevSync](https://github.com/SraoneMP/q3/actions/workflows/daily-commit.yml/badge.svg)
+
 A production-ready sentiment analysis API using FastAPI and OpenAI's structured outputs feature.
 
 ## ✨ Features
