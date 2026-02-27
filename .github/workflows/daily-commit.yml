@@ -56,6 +56,7 @@ jobs:
           else
             git commit -m "chore: Daily update $(date -u '+%Y-%m-%d %H:%M:%S UTC') [21f3000245@ds.study.iitm.ac.in]"
           fi
+          git pull --rebase origin main
           git push
       
       - name: Workflow completion summary
