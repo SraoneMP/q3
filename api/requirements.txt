@@ -1,0 +1,4 @@
+fastapi
+google-generativeai
+youtube-transcript-api
+pydantic
