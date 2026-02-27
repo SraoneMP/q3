@@ -1,0 +1,101 @@
+name: Daily Automated Commit - DevSync
+
+on:
+  schedule:
+    # Runs daily at 10:30 AM UTC (4:00 PM IST) - specific hours/minutes as required
+    - cron: '30 10 * * *'
+  workflow_dispatch:  # Allows manual triggering for testing
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Configure Git for 21f3000245@ds.study.iitm.ac.in
+        run: |
+          git config user.name "DevSync Bot"
+          git config user.email "21f3000245@ds.study.iitm.ac.in"
+      
+      - name: Create daily activity log for 21f3000245@ds.study.iitm.ac.in
+        run: |
+          # Create logs directory if it doesn't exist
+          mkdir -p .devsync/logs
+          
+          # Get current date and time
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          DATE=$(date -u '+%Y-%m-%d')
+          
+          # Create/update daily activity file
+          echo "==================================" >> .devsync/logs/activity.log
+          echo "Daily Activity: $TIMESTAMP" >> .devsync/logs/activity.log
+          echo "Workflow Run: #${{ github.run_number }}" >> .devsync/logs/activity.log
+          echo "Repository: ${{ github.repository }}" >> .devsync/logs/activity.log
+          echo "Email: 21f3000245@ds.study.iitm.ac.in" >> .devsync/logs/activity.log
+          echo "==================================" >> .devsync/logs/activity.log
+          echo "" >> .devsync/logs/activity.log
+          
+          # Create a date-specific status file
+          echo "DevSync Repository Status Report" > .devsync/status_${DATE}.txt
+          echo "================================" >> .devsync/status_${DATE}.txt
+          echo "Date: $TIMESTAMP" >> .devsync/status_${DATE}.txt
+          echo "Branch: ${{ github.ref_name }}" >> .devsync/status_${DATE}.txt
+          echo "Commit: ${{ github.sha }}" >> .devsync/status_${DATE}.txt
+          echo "Workflow: ${{ github.workflow }}" >> .devsync/status_${DATE}.txt
+          echo "Actor: DevSync Automation (21f3000245@ds.study.iitm.ac.in)" >> .devsync/status_${DATE}.txt
+          echo "" >> .devsync/status_${DATE}.txt
+          echo "This file was generated automatically by GitHub Actions" >> .devsync/status_${DATE}.txt
+          echo "as part of DevSync's daily repository update process." >> .devsync/status_${DATE}.txt
+          
+          # Update last sync timestamp
+          echo "$TIMESTAMP" > .devsync/last_sync.txt
+          
+          # Update simple last run file for compatibility
+          echo "Last run: $TIMESTAMP" > .last_run.txt
+          echo "Email: 21f3000245@ds.study.iitm.ac.in" >> .last_run.txt
+          
+          echo "✅ Activity log and status files created successfully"
+      
+      - name: Commit and push changes
+        run: |
+          git add .devsync/ .last_run.txt
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "⚠️ No changes to commit (files already up to date)"
+            # Create a commit anyway with --allow-empty to ensure daily commits
+            git commit --allow-empty -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+Automated by DevSync GitHub Actions
+Email: 21f3000245@ds.study.iitm.ac.in
+Run: #${{ github.run_number }}"
+          else
+            git commit -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+Automated by DevSync GitHub Actions
+Email: 21f3000245@ds.study.iitm.ac.in
+Run: #${{ github.run_number }}"
+          fi
+          
+          git push
+          echo "✅ Changes committed and pushed successfully"
+      
+      - name: Workflow completion summary
+        run: |
+          echo "================================================"
+          echo "✅ Daily Commit Workflow Completed Successfully"
+          echo "================================================"
+          echo "Timestamp: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+          echo "Repository: ${{ github.repository }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Run Number: #${{ github.run_number }}"
+          echo "Email: 21f3000245@ds.study.iitm.ac.in"
+          echo "================================================"
