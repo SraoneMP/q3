@@ -21,9 +21,11 @@ const urls = [
     
     for (const url of urls) {
         console.log(`\nScraping: ${url}`);
-        await page.goto(url, { waitUntil: 'networkidle' });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await page.waitForTimeout(2000);
         
-        const numbers = await page.$$eval('table td, table th', cells => {
+        const numbers = await page.evaluate(() => {
+            const cells = Array.from(document.querySelectorAll('table td, table th'));
             return cells.map(cell => {
                 const text = cell.textContent.trim();
                 const num = parseFloat(text);
