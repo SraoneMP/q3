@@ -1,16 +1,16 @@
 const { chromium } = require('playwright');
 
 const urls = [
-    'https://tds-playwright-scrapers.netlify.app/57',
-    'https://tds-playwright-scrapers.netlify.app/58',
-    'https://tds-playwright-scrapers.netlify.app/59',
-    'https://tds-playwright-scrapers.netlify.app/60',
-    'https://tds-playwright-scrapers.netlify.app/61',
-    'https://tds-playwright-scrapers.netlify.app/62',
-    'https://tds-playwright-scrapers.netlify.app/63',
-    'https://tds-playwright-scrapers.netlify.app/64',
-    'https://tds-playwright-scrapers.netlify.app/65',
-    'https://tds-playwright-scrapers.netlify.app/66'
+    'https://sanand0.github.io/tdsdata/js_table/?seed=57',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=58',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=59',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=60',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=61',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=62',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=63',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=64',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=65',
+    'https://sanand0.github.io/tdsdata/js_table/?seed=66'
 ];
 
 (async () => {
@@ -21,8 +21,10 @@ const urls = [
     
     for (const url of urls) {
         console.log(`\nScraping: ${url}`);
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-        await page.waitForTimeout(2000);
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 });
+        
+        // Wait for table to appear
+        await page.waitForSelector('table', { timeout: 10000 });
         
         const numbers = await page.evaluate(() => {
             const cells = Array.from(document.querySelectorAll('table td, table th'));
