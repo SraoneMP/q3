@@ -71,18 +71,9 @@ jobs:
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "⚠️ No changes to commit (files already up to date)"
-            # Create a commit anyway with --allow-empty to ensure daily commits
-            git commit --allow-empty -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-
-Automated by DevSync GitHub Actions
-Email: 21f3000245@ds.study.iitm.ac.in
-Run: #${{ github.run_number }}"
+            git commit --allow-empty -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC') [21f3000245@ds.study.iitm.ac.in]"
           else
-            git commit -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC')
-
-Automated by DevSync GitHub Actions
-Email: 21f3000245@ds.study.iitm.ac.in
-Run: #${{ github.run_number }}"
+            git commit -m "chore: Daily automated update - $(date -u '+%Y-%m-%d %H:%M:%S UTC') [21f3000245@ds.study.iitm.ac.in]"
           fi
           
           git push
