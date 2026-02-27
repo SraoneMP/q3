@@ -21,9 +21,8 @@ jobs:
       - name: Install dependencies for 21f3000245@ds.study.iitm.ac.in
         run: |
           cd sum-tables
-          npm install
-          npx playwright install-deps chromium
-          npx playwright install chromium
+          npm ci
+          node node_modules/playwright/cli.js install --with-deps chromium
       
       - name: Run Playwright scraper
         run: cd sum-tables && node scrape-tables.js
